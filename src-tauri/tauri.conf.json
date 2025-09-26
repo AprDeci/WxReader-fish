@@ -1,11 +1,11 @@
 {
-  "productName": "Weekly",
-  "identifier": "com.pake.weekly",
+  "productName": "WxReader-fish",
+  "identifier": "top.aprdec.wxreader-fish",
   "version": "1.0.0",
   "app": {
     "withGlobalTauri": true,
     "trayIcon": {
-      "iconPath": "png/weekly_512.png",
+      "iconPath": "png/weread_fish_512.png",
       "iconAsTemplate": false,
       "id": "pake-tray"
     },

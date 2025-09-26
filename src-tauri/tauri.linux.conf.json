@@ -1,13 +1,21 @@
 {
-  "productName": "weekly",
+  "productName": "WxReader-fish",
   "bundle": {
-    "icon": ["png/weekly_512.png"],
+    "icon": [
+      "png/weread_fish_512.png"
+    ],
     "active": true,
     "linux": {
       "deb": {
-        "depends": ["curl", "wget"]
+        "depends": [
+          "curl",
+          "wget"
+        ]
       }
     },
-    "targets": ["deb", "appimage"]
+    "targets": [
+      "deb",
+      "appimage"
+    ]
   }
 }
