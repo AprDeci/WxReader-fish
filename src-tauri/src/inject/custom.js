@@ -1,26 +1,34 @@
 document.addEventListener("DOMContentLoaded", () => {
+
+    if (document.getElementById("OptionPanel")) return;
+
     const panel = document.createElement("div");
     panel.id = "OptionPanel";
     panel.style.cssText = `
       position: fixed;
-      top: 0;
+      top: 50%;
       left: 0;
-      width: 10px;
-      height: 100px;
-      background: rgba(0, 0, 0, 0.2) !important;
+      transform: translateY(-50%);
+      width: 8px;
+      height: 120px;
+      background: rgba(30, 30, 35, 0.75);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border-radius: 0 8px 8px 0;
       z-index: 2147483647;
-      transition: width 0.3s ease;
+      transition: width 0.3s cubic-bezier(0.2, 0, 0.2, 1);
       cursor: pointer;
       overflow: hidden;
       display: flex;
       align-items: center;
-      font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      box-shadow: 2px 0 12px rgba(0, 0, 0, 0.25);
+      border: 1px solid rgba(255, 255, 255, 0.08);
     `;
+    panel.setAttribute('data-tauri-drag-region', '');
     document.body.appendChild(panel);
 
-    const fullWidth = 200;
-
-    panel.setAttribute('data-tauri-drag-region', '');
+    const fullWidth = 220;
 
     panel.addEventListener("mouseenter", () => {
         panel.style.width = `${fullWidth}px`;
@@ -28,9 +36,8 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     panel.addEventListener("mouseleave", () => {
-        panel.style.width = "10px";
+        panel.style.width = "8px";
     });
-
 
     function ensurePanelContent() {
         if (panel.querySelector('.panel-content')) return;
@@ -38,34 +45,57 @@ document.addEventListener("DOMContentLoaded", () => {
         const container = document.createElement("div");
         container.className = 'panel-content';
         container.style.cssText = `
-        padding: 0 10px;
+        padding: 0 16px;
         height: 100%;
         display: flex;
-        align-items: center;
-        gap: 12px;
+        flex-direction: column;
+        justify-content: center;
+        gap: 14px;
         color: white;
       `;
 
-
-
-        const button = document.createElement("button");
-        button.textContent = "翻页按钮显示";
-        button.style.cssText = `
-          cursor: pointer;
-          color: white
-        `;
-        button.addEventListener("click", () => {
-            let target = document.querySelector(".renderTarget_pager");
-            let opacity = parseFloat(target.style.opacity || 1);
-            opacity = opacity === 1 ? 0 : 1;
-            target.style.opacity = `${opacity}`;
+        // 翻页按钮
+        const toggleBtn = document.createElement("button");
+        toggleBtn.innerHTML = '👁️ 显示/隐藏翻页按钮';
+        toggleBtn.style.cssText = `
+        background: rgba(255, 255, 255, 0.12);
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        color: white;
+        padding: 8px 14px;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 14px;
+        font-weight: 500;
+        backdrop-filter: blur(4px);
+        transition: all 0.2s ease;
+        text-align: left;
+        width: 100%;
+      `;
+        toggleBtn.addEventListener("mouseenter", () => {
+            toggleBtn.style.background = 'rgba(255, 255, 255, 0.2)';
         });
-        container.appendChild(button);
+        toggleBtn.addEventListener("mouseleave", () => {
+            toggleBtn.style.background = 'rgba(255, 255, 255, 0.12)';
+        });
+        toggleBtn.addEventListener("click", (e) => {
+            e.stopPropagation();
+            const target = document.querySelector(".renderTarget_pager");
+            if (target) {
+                const isVisible = target.style.opacity !== '0';
+                target.style.opacity = isVisible ? '0' : '1';
+                target.style.pointerEvents = isVisible ? 'none' : 'auto';
+                toggleBtn.textContent = isVisible ? '👁️ 显示翻页按钮' : '✅ 翻页按钮已显示';
+                setTimeout(() => {
+                    toggleBtn.textContent = '👁️ 显示/隐藏翻页按钮';
+                }, 1000);
+            }
+        });
 
-
+        container.appendChild(toggleBtn);
         panel.appendChild(container);
     }
 
+    // 可选：自动注入其他控件（保留你的逻辑）
     const observer = new MutationObserver(() => {
         const container = panel.querySelector('.panel-content');
         if (!container) return;
