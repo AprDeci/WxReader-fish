@@ -2,9 +2,13 @@
   "$schema": "../gen/schemas/desktop-schema.json",
   "identifier": "pake-capability",
   "description": "Capability for the pake app.",
-  "webviews": ["pake"],
+  "webviews": [
+    "pake"
+  ],
   "remote": {
-    "urls": ["https://*.*"]
+    "urls": [
+      "https://*.*"
+    ]
   },
   "permissions": [
     "shell:allow-open",
@@ -19,6 +23,9 @@
     "notification:allow-get-active",
     "notification:allow-register-listener",
     "notification:allow-register-action-types",
+    "global-shortcut:allow-is-registered",
+    "global-shortcut:allow-register",
+    "global-shortcut:allow-unregister",
     "notification:default",
     "core:path:default"
   ]
