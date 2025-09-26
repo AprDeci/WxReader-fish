@@ -17,5 +17,15 @@ document.addEventListener("DOMContentLoaded", () => {
     }, 3000);
   }
 
+  function nextPage() {
+    const nextButton = document.querySelector('button.renderTarget_pager_button_right');
+    if (nextButton) {
+      nextButton.click();
+    } else {
+      console.log('未找到下一页按钮');
+    }
+  }
+
   window.pakeToast = pakeToast;
+  window.nextPage = nextPage;
 });
