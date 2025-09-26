@@ -4,12 +4,33 @@ window.addEventListener("DOMContentLoaded", (_event) => {
     body.wr_page_reader {
       background: transparent !important;
     }
-    body.wr_page_reader *,
-    body.wr_page_reader *::before,
-    body.wr_page_reader *::after {
+
+    div#routerView{
       background: transparent !important;
-      box-shadow: none !important;
-      border: none !important;
+    }
+    
+    div.wr_horizontalReader_app_content{
+      background: transparent !important;
+    }
+
+    div.wr_horizontalReader_app_content {
+      background: transparent !important;
+    }
+
+    div.readerChapterContent_container {
+      background: transparent !important;
+    }
+
+    body.wr_page_reader div.renderTargetContainer {
+      background: transparent !important;
+    }
+    
+    div.readerChapterContent.fontLevel1 {
+      background: transparent !important;
+    }
+
+    div.readerTopBar {
+      background: transparent !important;
     }
 
     #page #footer-wrapper,
