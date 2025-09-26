@@ -18,6 +18,8 @@ pub struct WindowConfig {
     pub title: Option<String>,
     pub enable_wasm: bool,
     pub enable_drag_drop: bool,
+    pub decorations: bool,
+    pub transparent: bool,
 }
 
 #[derive(Debug, Serialize, Deserialize)]

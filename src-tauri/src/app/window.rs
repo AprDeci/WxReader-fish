@@ -1,7 +1,7 @@
 use crate::app::config::PakeConfig;
 use crate::util::get_data_dir;
 use std::{path::PathBuf, str::FromStr};
-use tauri::{App, Config, Url, WebviewUrl, WebviewWindow, WebviewWindowBuilder};
+use tauri::{window, App, Config, Url, WebviewUrl, WebviewWindow, WebviewWindowBuilder};
 
 #[cfg(target_os = "macos")]
 use tauri::{Theme, TitleBarStyle};
@@ -45,6 +45,8 @@ pub fn set_window(app: &mut App, config: &PakeConfig, tauri_config: &Config) -> 
         .fullscreen(window_config.fullscreen)
         .inner_size(window_config.width, window_config.height)
         .always_on_top(window_config.always_on_top)
+        .transparent(window_config.transparent)
+        .decorations(window_config.decorations)
         .incognito(window_config.incognito);
 
     if !window_config.enable_drag_drop {
