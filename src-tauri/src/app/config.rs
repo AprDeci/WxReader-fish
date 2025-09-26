@@ -20,6 +20,7 @@ pub struct WindowConfig {
     pub enable_drag_drop: bool,
     pub decorations: bool,
     pub transparent: bool,
+    pub shadow: bool,
 }
 
 #[derive(Debug, Serialize, Deserialize)]

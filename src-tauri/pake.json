@@ -16,8 +16,9 @@
       "incognito": false,
       "enable_wasm": false,
       "enable_drag_drop": false,
-      "decorations": true,
-      "transparent": true
+      "decorations": false,
+      "transparent": true,
+      "shadow": false
     }
   ],
   "user_agent": {

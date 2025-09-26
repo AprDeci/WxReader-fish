@@ -47,6 +47,7 @@ pub fn set_window(app: &mut App, config: &PakeConfig, tauri_config: &Config) -> 
         .always_on_top(window_config.always_on_top)
         .transparent(window_config.transparent)
         .decorations(window_config.decorations)
+        .shadow(window_config.shadow)
         .incognito(window_config.incognito);
 
     if !window_config.enable_drag_drop {
