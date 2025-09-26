@@ -170,11 +170,7 @@ fn handle_shortcut_action(app: &AppHandle, shortcut: &str) {
         "Alt+Z" => {  
             if let Some(window) = app.get_webview_window("pake") {  
                 let script = r#"  
-                    window.postMessage({   
-                        type: 'PAKE_CUSTOM_SHORTCUT',   
-                        action: 'Alt+Z_pressed',  
-                        timestamp: Date.now()  
-                    }, '*');  
+                    prevPage();
                 "#;  
                 window.eval(script).unwrap();  
             }  
