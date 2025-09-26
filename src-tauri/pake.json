@@ -1,14 +1,14 @@
 {
   "windows": [
     {
-      "url": "https://baidu.com",
+      "url": "https://weread.qq.com/",
       "url_type": "web",
       "hide_title_bar": false,
       "fullscreen": false,
       "width": 480,
       "height": 800,
       "resizable": true,
-      "always_on_top": false,
+      "always_on_top": true,
       "dark_mode": false,
       "activation_shortcut": "",
       "disabled_web_shortcuts": false,
@@ -16,7 +16,7 @@
       "incognito": false,
       "enable_wasm": false,
       "enable_drag_drop": false,
-      "decorations": false,
+      "decorations": true,
       "transparent": true
     }
   ],

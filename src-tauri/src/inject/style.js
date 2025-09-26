@@ -1,6 +1,17 @@
 window.addEventListener("DOMContentLoaded", (_event) => {
   // Customize and transform existing functions
   const contentCSS = `
+    body.wr_page_reader {
+      background: transparent !important;
+    }
+    body.wr_page_reader *,
+    body.wr_page_reader *::before,
+    body.wr_page_reader *::after {
+      background: transparent !important;
+      box-shadow: none !important;
+      border: none !important;
+    }
+
     #page #footer-wrapper,
     .drawing-board .toolbar .toolbar-action,
     .c-swiper-container,
