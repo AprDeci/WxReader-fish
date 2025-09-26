@@ -45,6 +45,24 @@ document.addEventListener("DOMContentLoaded", () => {
         gap: 12px;
         color: white;
       `;
+
+
+
+        const button = document.createElement("button");
+        button.textContent = "翻页按钮显示";
+        button.style.cssText = `
+          cursor: pointer;
+          color: white
+        `;
+        button.addEventListener("click", () => {
+            let target = document.querySelector(".renderTarget_pager");
+            let opacity = parseFloat(target.style.opacity || 1);
+            opacity = opacity === 1 ? 0 : 1;
+            target.style.opacity = `${opacity}`;
+        });
+        container.appendChild(button);
+
+
         panel.appendChild(container);
     }
 
