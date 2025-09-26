@@ -7,7 +7,7 @@ document.addEventListener("DOMContentLoaded", () => {
       left: 0;
       width: 10px;
       height: 100px;
-      background: rgba(0, 0, 0, 0.6) !important;
+      background: rgba(0, 0, 0, 0.2) !important;
       z-index: 2147483647;
       transition: width 0.3s ease;
       cursor: pointer;
@@ -20,6 +20,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const fullWidth = 200;
 
+    panel.setAttribute('data-tauri-drag-region', '');
 
     panel.addEventListener("mouseenter", () => {
         panel.style.width = `${fullWidth}px`;
@@ -29,6 +30,7 @@ document.addEventListener("DOMContentLoaded", () => {
     panel.addEventListener("mouseleave", () => {
         panel.style.width = "10px";
     });
+
 
     function ensurePanelContent() {
         if (panel.querySelector('.panel-content')) return;
