@@ -148,7 +148,7 @@ pub fn set_multiple_global_shortcuts(app: &AppHandle, shortcuts: Vec<String>) ->
 }
 fn handle_shortcut_action(app: &AppHandle, shortcut: &str) {  
     match shortcut {  
-        "CmdOrControl+Shift+P" => {  
+        "Alt+V" => {  
             if let Some(window) = app.get_webview_window("pake") {  
                 let is_visible = window.is_visible().unwrap();  
                 if is_visible {  
@@ -161,7 +161,6 @@ fn handle_shortcut_action(app: &AppHandle, shortcut: &str) {
         },  
         "Alt+C" => {  
             if let Some(window) = app.get_webview_window("pake") {  
-                println!("Alt+C pressed");
                 let script = r#"  
                     nextPage();
                 "#;  

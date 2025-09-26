@@ -26,6 +26,16 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
+  function prevPage() {
+    const prevButton = document.querySelector('button.renderTarget_pager_button');
+    if (prevButton) {
+      prevButton.click();
+    } else {
+      console.log('未找到上一页按钮');
+    }
+  }
+
   window.pakeToast = pakeToast;
   window.nextPage = nextPage;
+  window.prevPage = prevPage;
 });
