@@ -11,7 +11,7 @@ use std::time::Duration;
 
 use app::{
     invoke::{download_file, download_file_by_binary, send_notification},
-    setup::{set_global_shortcut, set_system_tray},
+    setup::{set_multiple_global_shortcuts, set_system_tray},
     window::set_window,
 };
 use util::get_pake_config;
@@ -23,6 +23,8 @@ pub fn run_app() {
     let show_system_tray = pake_config.show_system_tray();
     let hide_on_close = pake_config.windows[0].hide_on_close;
     let activation_shortcut = pake_config.windows[0].activation_shortcut.clone();
+    let mut shortcuts = vec![activation_shortcut];
+    shortcuts.extend(pake_config.windows[0].custom_shortcuts.clone());
     let init_fullscreen = pake_config.windows[0].fullscreen;
 
     let window_state_plugin = WindowStatePlugin::default()
@@ -56,7 +58,7 @@ pub fn run_app() {
         .setup(move |app| {
             let window = set_window(app, &pake_config, &tauri_config);
             set_system_tray(app.app_handle(), show_system_tray).unwrap();
-            set_global_shortcut(app.app_handle(), activation_shortcut).unwrap();
+            set_multiple_global_shortcuts(app.app_handle(), shortcuts).unwrap();
             
 
             // Show window after state restoration to prevent position flashing

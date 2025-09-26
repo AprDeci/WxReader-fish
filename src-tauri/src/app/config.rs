@@ -13,6 +13,7 @@ pub struct WindowConfig {
     pub dark_mode: bool,
     pub disabled_web_shortcuts: bool,
     pub activation_shortcut: String,
+    pub custom_shortcuts: Vec<String>,
     pub hide_on_close: bool,
     pub incognito: bool,
     pub title: Option<String>,
