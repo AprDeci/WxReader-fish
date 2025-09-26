@@ -57,6 +57,7 @@ pub fn run_app() {
             let window = set_window(app, &pake_config, &tauri_config);
             set_system_tray(app.app_handle(), show_system_tray).unwrap();
             set_global_shortcut(app.app_handle(), activation_shortcut).unwrap();
+            
 
             // Show window after state restoration to prevent position flashing
             let window_clone = window.clone();

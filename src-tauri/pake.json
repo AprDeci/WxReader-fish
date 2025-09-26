@@ -10,7 +10,7 @@
       "resizable": true,
       "always_on_top": true,
       "dark_mode": false,
-      "activation_shortcut": "",
+      "activation_shortcut": "Alt+V",
       "disabled_web_shortcuts": false,
       "hide_on_close": true,
       "incognito": false,
