@@ -27,6 +27,7 @@
     "global-shortcut:allow-register",
     "global-shortcut:allow-unregister",
     "notification:default",
-    "core:path:default"
+    "core:path:default",
+    "window-state:default"
   ]
 }

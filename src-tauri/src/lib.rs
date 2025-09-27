@@ -4,7 +4,7 @@ mod util;
 
 use tauri::Manager;
 use tauri_plugin_window_state::Builder as WindowStatePlugin;
-use tauri_plugin_window_state::StateFlags;
+use tauri_plugin_window_state::{AppHandleExt, StateFlags};
 
 #[cfg(target_os = "macos")]
 use std::time::Duration;
@@ -18,7 +18,8 @@ use util::get_pake_config;
 
 pub fn run_app() {
     let (pake_config, tauri_config) = get_pake_config();
-    let tauri_app = tauri::Builder::default();
+    let tauri_app =
+        tauri::Builder::default().plugin(tauri_plugin_window_state::Builder::new().build());
 
     let show_system_tray = pake_config.show_system_tray();
     let hide_on_close = pake_config.windows[0].hide_on_close;
@@ -59,7 +60,6 @@ pub fn run_app() {
             let window = set_window(app, &pake_config, &tauri_config);
             set_system_tray(app.app_handle(), show_system_tray).unwrap();
             set_multiple_global_shortcuts(app.app_handle(), shortcuts).unwrap();
-            
 
             // Show window after state restoration to prevent position flashing
             let window_clone = window.clone();
@@ -71,6 +71,13 @@ pub fn run_app() {
             Ok(())
         })
         .on_window_event(move |_window, _event| {
+            match _event {  
+                tauri::WindowEvent::Moved(_) | tauri::WindowEvent::Resized(_) => {  
+                    let app = _window.app_handle().clone();
+                    app.save_window_state(StateFlags::all()).ok();
+                }  
+                _ => {}  
+            }
             if let tauri::WindowEvent::CloseRequested { api, .. } = _event {
                 if hide_on_close {
                     // Hide window when hide_on_close is enabled (regardless of tray status)
