@@ -5,8 +5,8 @@ document.addEventListener("DOMContentLoaded", () => {
     const panel = document.createElement("div");
     panel.id = "OptionPanel";
     panel.style.cssText = `
-      position: fixed;
-      top: 50%;
+      position: absolute;
+      top: 60px;
       left: 0;
       transform: translateY(-50%);
       width: 8px;
@@ -54,6 +54,19 @@ document.addEventListener("DOMContentLoaded", () => {
         color: white;
       `;
 
+        //拖动框
+        const dragRegion = document.createElement("div");
+        dragRegion.setAttribute('data-tauri-drag-region', '');
+        dragRegion.style.cssText = `
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        cursor: move;
+      `;
+        container.appendChild(dragRegion);
+
         // 翻页按钮
         const toggleBtn = document.createElement("button");
         toggleBtn.innerHTML = '👁️ 显示/隐藏翻页按钮';
@@ -92,6 +105,33 @@ document.addEventListener("DOMContentLoaded", () => {
         });
 
         container.appendChild(toggleBtn);
+
+        //返回首页按钮
+        const indexBtn = document.createElement("button")
+        indexBtn.style.cssText = `
+        background: rgba(255, 255, 255, 0.12);
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        color: white;
+        padding: 8px 14px;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 14px;
+        font-weight: 500;
+        backdrop-filter: blur(4px);
+        transition: all 0.2s ease;
+        text-align: left;
+        width: 100%;
+      `;
+        indexBtn.innerHTML = '🏠 返回首页';
+        indexBtn.addEventListener("click", () => {
+            if (document.querySelector(".readerTopBar_link")) {
+                document.querySelector(".readerTopBar_link").click();
+            }
+        })
+
+        container.appendChild(indexBtn);
+
+
         panel.appendChild(container);
     }
 
