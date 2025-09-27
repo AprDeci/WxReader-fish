@@ -10,7 +10,7 @@ document.addEventListener("DOMContentLoaded", () => {
       left: 0;
       transform: translateY(-50%);
       width: 8px;
-      height: 120px;
+      height: 160px;
       background: rgba(30, 30, 35, 0.75);
       backdrop-filter: blur(10px);
       -webkit-backdrop-filter: blur(10px);
@@ -28,7 +28,7 @@ document.addEventListener("DOMContentLoaded", () => {
     panel.setAttribute('data-tauri-drag-region', '');
     document.body.appendChild(panel);
 
-    const fullWidth = 220;
+    const fullWidth = 320;
 
     panel.addEventListener("mouseenter", () => {
         panel.style.width = `${fullWidth}px`;
@@ -46,7 +46,7 @@ document.addEventListener("DOMContentLoaded", () => {
         container.className = 'panel-content';
         container.style.cssText = `
         padding: 0 16px;
-        height: 100%;
+        
         display: flex;
         flex-direction: column;
         justify-content: center;
@@ -64,6 +64,7 @@ document.addEventListener("DOMContentLoaded", () => {
         width: 100%;
         height: 100%;
         cursor: move;
+        z-index: -1;
       `;
         container.appendChild(dragRegion);
 
@@ -142,6 +143,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
         const items = document.querySelectorAll('.readerControls_item');
         if (items.length > 0 && !container.contains(items[items.length - 1])) {
+            const item = document.createElement("div");
+            item.innerText = "黑夜/白天";
+            items[items.length - 1].appendChild(item);
             container.appendChild(items[items.length - 1]);
         }
     });
