@@ -10,6 +10,9 @@
 - 窗口状态保存
 - 微信阅读网页版的所有功能
 
+## 操作提示
+侧边面板空白处拖住可以移动窗口
+
 ## 图片
 
 ![all](https://github.com/AprDeci/WxReader-fish/blob/main/imgs/all.png)
