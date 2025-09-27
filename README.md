@@ -8,3 +8,7 @@
 - 老板键
 - 快捷键上下页
 - 微信阅读网页版的所有功能
+
+## 图片
+
+![all](https://github.com/AprDeci/WxReader-fish/blob/main/imgs/all.png)
