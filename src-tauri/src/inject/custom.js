@@ -5,8 +5,8 @@ document.addEventListener("DOMContentLoaded", () => {
     const panel = document.createElement("div");
     panel.id = "OptionPanel";
     panel.style.cssText = `
-      position: absolute;
-      top: 60px;
+      position: fixed;
+      top: 50%;
       left: 0;
       transform: translateY(-50%);
       width: 8px;
