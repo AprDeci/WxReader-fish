@@ -71,12 +71,12 @@ pub fn run_app() {
             Ok(())
         })
         .on_window_event(move |_window, _event| {
-            match _event {  
-                tauri::WindowEvent::Moved(_) | tauri::WindowEvent::Resized(_) => {  
+            match _event {
+                tauri::WindowEvent::Moved(_) | tauri::WindowEvent::Resized(_) => {
                     let app = _window.app_handle().clone();
                     app.save_window_state(StateFlags::all()).ok();
-                }  
-                _ => {}  
+                }
+                _ => {}
             }
             if let tauri::WindowEvent::CloseRequested { api, .. } = _event {
                 if hide_on_close {

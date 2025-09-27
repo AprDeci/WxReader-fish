@@ -11,10 +11,7 @@
       "always_on_top": true,
       "dark_mode": false,
       "activation_shortcut": "Alt+V",
-      "custom_shortcuts": [
-        "Alt+Z",
-        "Alt+C"
-      ],
+      "custom_shortcuts": ["Alt+Z", "Alt+C"],
       "disabled_web_shortcuts": false,
       "hide_on_close": true,
       "incognito": false,

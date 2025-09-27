@@ -96,87 +96,90 @@ pub fn set_system_tray(app: &AppHandle, show_system_tray: bool) -> tauri::Result
 //     Ok(())
 // }
 
-pub fn set_multiple_global_shortcuts(app: &AppHandle, shortcuts: Vec<String>) -> tauri::Result<()> {  
-    if shortcuts.is_empty() {  
-        return Ok(());  
-    }  
-  
-    let app_handle = app.clone();  
-    let last_triggered = Arc::new(Mutex::new(Instant::now()));  
-    let shortcuts_clone = shortcuts.clone();  
-  
-    // 先注册插件处理器  
-    app_handle  
-        .plugin(  
-            tauri_plugin_global_shortcut::Builder::new()  
-                .with_handler(move |app, event, _shortcut| {  
-                    let mut last_triggered = last_triggered.lock().unwrap();  
-                    if Instant::now().duration_since(*last_triggered) < Duration::from_millis(300) {  
-                        return;  
-                    }  
-                    *last_triggered = Instant::now();  
-  
-                    // 检查哪个快捷键被触发  
-                    for shortcut_str in &shortcuts_clone {  
-                        if let Ok(shortcut_hotkey) = Shortcut::from_str(shortcut_str) {  
-                            if shortcut_hotkey.eq(event) {  
-                                handle_shortcut_action(app, shortcut_str);  
-                                break;  
-                            }  
-                        }  
-                    }  
-                })  
-                .build(),  
-        )  
-        .expect("Failed to set global shortcuts");  
-  
-    // 然后注册所有快捷键  
-    for shortcut_str in &shortcuts {  
-        if let Ok(shortcut_hotkey) = Shortcut::from_str(shortcut_str) {  
-           match app.global_shortcut().register(shortcut_hotkey) {
-                Ok(_)=>{
+pub fn set_multiple_global_shortcuts(app: &AppHandle, shortcuts: Vec<String>) -> tauri::Result<()> {
+    if shortcuts.is_empty() {
+        return Ok(());
+    }
+
+    let app_handle = app.clone();
+    let last_triggered = Arc::new(Mutex::new(Instant::now()));
+    let shortcuts_clone = shortcuts.clone();
+
+    // 先注册插件处理器
+    app_handle
+        .plugin(
+            tauri_plugin_global_shortcut::Builder::new()
+                .with_handler(move |app, event, _shortcut| {
+                    let mut last_triggered = last_triggered.lock().unwrap();
+                    if Instant::now().duration_since(*last_triggered) < Duration::from_millis(300) {
+                        return;
+                    }
+                    *last_triggered = Instant::now();
+
+                    // 检查哪个快捷键被触发
+                    for shortcut_str in &shortcuts_clone {
+                        if let Ok(shortcut_hotkey) = Shortcut::from_str(shortcut_str) {
+                            if shortcut_hotkey.eq(event) {
+                                handle_shortcut_action(app, shortcut_str);
+                                break;
+                            }
+                        }
+                    }
+                })
+                .build(),
+        )
+        .expect("Failed to set global shortcuts");
+
+    // 然后注册所有快捷键
+    for shortcut_str in &shortcuts {
+        if let Ok(shortcut_hotkey) = Shortcut::from_str(shortcut_str) {
+            match app.global_shortcut().register(shortcut_hotkey) {
+                Ok(_) => {
                     println!("Registered global shortcut '{}'", shortcut_str);
                 }
-                Err(e)=>{
-                    eprintln!("Failed to register global shortcut '{}': {}", shortcut_str, e);
+                Err(e) => {
+                    eprintln!(
+                        "Failed to register global shortcut '{}': {}",
+                        shortcut_str, e
+                    );
                 }
             }
-        }  
-    }  
-  
-    Ok(())  
+        }
+    }
+
+    Ok(())
 }
-fn handle_shortcut_action(app: &AppHandle, shortcut: &str) {  
-    match shortcut {  
-        "Alt+V" => {  
-            if let Some(window) = app.get_webview_window("pake") {  
-                let is_visible = window.is_visible().unwrap();  
-                if is_visible {  
-                    window.hide().unwrap();  
-                } else {  
-                    window.show().unwrap();  
-                    window.set_focus().unwrap();  
-                }  
-            }  
-        },  
-        "Alt+C" => {  
-            if let Some(window) = app.get_webview_window("pake") {  
+fn handle_shortcut_action(app: &AppHandle, shortcut: &str) {
+    match shortcut {
+        "Alt+V" => {
+            if let Some(window) = app.get_webview_window("pake") {
+                let is_visible = window.is_visible().unwrap();
+                if is_visible {
+                    window.hide().unwrap();
+                } else {
+                    window.show().unwrap();
+                    window.set_focus().unwrap();
+                }
+            }
+        }
+        "Alt+C" => {
+            if let Some(window) = app.get_webview_window("pake") {
                 let script = r#"  
                     nextPage();
-                "#;  
-                window.eval(script).unwrap();  
-            }  
-        },  
-        "Alt+Z" => {  
-            if let Some(window) = app.get_webview_window("pake") {  
+                "#;
+                window.eval(script).unwrap();
+            }
+        }
+        "Alt+Z" => {
+            if let Some(window) = app.get_webview_window("pake") {
                 let script = r#"  
                     prevPage();
-                "#;  
-                window.eval(script).unwrap();  
-            }  
-        },  
-        _ => {  
-            println!("Unknown shortcut: {}", shortcut);  
-        }  
-    }  
+                "#;
+                window.eval(script).unwrap();
+            }
+        }
+        _ => {
+            println!("Unknown shortcut: {}", shortcut);
+        }
+    }
 }

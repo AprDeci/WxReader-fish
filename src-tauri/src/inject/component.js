@@ -18,20 +18,24 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function nextPage() {
-    const nextButton = document.querySelector('button.renderTarget_pager_button_right');
+    const nextButton = document.querySelector(
+      "button.renderTarget_pager_button_right",
+    );
     if (nextButton) {
       nextButton.click();
     } else {
-      console.log('未找到下一页按钮');
+      console.log("未找到下一页按钮");
     }
   }
 
   function prevPage() {
-    const prevButton = document.querySelector('button.renderTarget_pager_button');
+    const prevButton = document.querySelector(
+      "button.renderTarget_pager_button",
+    );
     if (prevButton) {
       prevButton.click();
     } else {
-      console.log('未找到上一页按钮');
+      console.log("未找到上一页按钮");
     }
   }
 

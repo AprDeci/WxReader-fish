@@ -1,11 +1,7 @@
 {
   "bundle": {
-    "icon": [
-      "icons/weread_fish.icns"
-    ],
+    "icon": ["icons/weread_fish.icns"],
     "active": true,
-    "targets": [
-      "dmg"
-    ]
+    "targets": ["dmg"]
   }
 }

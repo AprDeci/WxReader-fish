@@ -1,10 +1,9 @@
 document.addEventListener("DOMContentLoaded", () => {
+  if (document.getElementById("OptionPanel")) return;
 
-    if (document.getElementById("OptionPanel")) return;
-
-    const panel = document.createElement("div");
-    panel.id = "OptionPanel";
-    panel.style.cssText = `
+  const panel = document.createElement("div");
+  panel.id = "OptionPanel";
+  panel.style.cssText = `
       position: fixed;
       top: 50%;
       left: 0;
@@ -25,26 +24,26 @@ document.addEventListener("DOMContentLoaded", () => {
       box-shadow: 2px 0 12px rgba(0, 0, 0, 0.25);
       border: 1px solid rgba(255, 255, 255, 0.08);
     `;
-    panel.setAttribute('data-tauri-drag-region', '');
-    document.body.appendChild(panel);
+  panel.setAttribute("data-tauri-drag-region", "");
+  document.body.appendChild(panel);
 
-    const fullWidth = 320;
+  const fullWidth = 320;
 
-    panel.addEventListener("mouseenter", () => {
-        panel.style.width = `${fullWidth}px`;
-        ensurePanelContent();
-    });
+  panel.addEventListener("mouseenter", () => {
+    panel.style.width = `${fullWidth}px`;
+    ensurePanelContent();
+  });
 
-    panel.addEventListener("mouseleave", () => {
-        panel.style.width = "8px";
-    });
+  panel.addEventListener("mouseleave", () => {
+    panel.style.width = "8px";
+  });
 
-    function ensurePanelContent() {
-        if (panel.querySelector('.panel-content')) return;
+  function ensurePanelContent() {
+    if (panel.querySelector(".panel-content")) return;
 
-        const container = document.createElement("div");
-        container.className = 'panel-content';
-        container.style.cssText = `
+    const container = document.createElement("div");
+    container.className = "panel-content";
+    container.style.cssText = `
         padding: 0 16px;
         
         display: flex;
@@ -54,10 +53,10 @@ document.addEventListener("DOMContentLoaded", () => {
         color: white;
       `;
 
-        //拖动框
-        const dragRegion = document.createElement("div");
-        dragRegion.setAttribute('data-tauri-drag-region', '');
-        dragRegion.style.cssText = `
+    //拖动框
+    const dragRegion = document.createElement("div");
+    dragRegion.setAttribute("data-tauri-drag-region", "");
+    dragRegion.style.cssText = `
         position: absolute;
         top: 0;
         left: 0;
@@ -66,12 +65,12 @@ document.addEventListener("DOMContentLoaded", () => {
         cursor: move;
         z-index: -1;
       `;
-        container.appendChild(dragRegion);
+    container.appendChild(dragRegion);
 
-        // 翻页按钮
-        const toggleBtn = document.createElement("button");
-        toggleBtn.innerHTML = '👁️ 显示/隐藏翻页按钮';
-        toggleBtn.style.cssText = `
+    // 翻页按钮
+    const toggleBtn = document.createElement("button");
+    toggleBtn.innerHTML = "👁️ 显示/隐藏翻页按钮";
+    toggleBtn.style.cssText = `
         background: rgba(255, 255, 255, 0.12);
         border: 1px solid rgba(255, 255, 255, 0.15);
         color: white;
@@ -85,70 +84,71 @@ document.addEventListener("DOMContentLoaded", () => {
         text-align: left;
         width: 100%;
       `;
-        toggleBtn.addEventListener("mouseenter", () => {
-            toggleBtn.style.background = 'rgba(255, 255, 255, 0.2)';
-        });
-        toggleBtn.addEventListener("mouseleave", () => {
-            toggleBtn.style.background = 'rgba(255, 255, 255, 0.12)';
-        });
-        toggleBtn.addEventListener("click", (e) => {
-            e.stopPropagation();
-            const target = document.querySelector(".renderTarget_pager");
-            if (target) {
-                const isVisible = target.style.opacity !== '0';
-                target.style.opacity = isVisible ? '0' : '1';
-                target.style.pointerEvents = isVisible ? 'none' : 'auto';
-                toggleBtn.textContent = isVisible ? '👁️ 显示翻页按钮' : '✅ 翻页按钮已显示';
-                setTimeout(() => {
-                    toggleBtn.textContent = '👁️ 显示/隐藏翻页按钮';
-                }, 1000);
-            }
-        });
-
-        container.appendChild(toggleBtn);
-
-        //返回首页按钮
-        const indexBtn = document.createElement("button")
-        indexBtn.style.cssText = `
-        background: rgba(255, 255, 255, 0.12);
-        border: 1px solid rgba(255, 255, 255, 0.15);
-        color: white;
-        padding: 8px 14px;
-        border-radius: 6px;
-        cursor: pointer;
-        font-size: 14px;
-        font-weight: 500;
-        backdrop-filter: blur(4px);
-        transition: all 0.2s ease;
-        text-align: left;
-        width: 100%;
-      `;
-        indexBtn.innerHTML = '🏠 返回首页';
-        indexBtn.addEventListener("click", () => {
-            if (document.querySelector(".readerTopBar_link")) {
-                document.querySelector(".readerTopBar_link").click();
-            }
-        })
-
-        container.appendChild(indexBtn);
-
-
-        panel.appendChild(container);
-    }
-
-    // 可选：自动注入其他控件（保留你的逻辑）
-    const observer = new MutationObserver(() => {
-        const container = panel.querySelector('.panel-content');
-        if (!container) return;
-
-        const items = document.querySelectorAll('.readerControls_item');
-        if (items.length > 0 && !container.contains(items[items.length - 1])) {
-            const item = document.createElement("div");
-            item.innerText = "黑夜/白天";
-            items[items.length - 1].appendChild(item);
-            container.appendChild(items[items.length - 1]);
-        }
+    toggleBtn.addEventListener("mouseenter", () => {
+      toggleBtn.style.background = "rgba(255, 255, 255, 0.2)";
+    });
+    toggleBtn.addEventListener("mouseleave", () => {
+      toggleBtn.style.background = "rgba(255, 255, 255, 0.12)";
+    });
+    toggleBtn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      const target = document.querySelector(".renderTarget_pager");
+      if (target) {
+        const isVisible = target.style.opacity !== "0";
+        target.style.opacity = isVisible ? "0" : "1";
+        target.style.pointerEvents = isVisible ? "none" : "auto";
+        toggleBtn.textContent = isVisible
+          ? "👁️ 显示翻页按钮"
+          : "✅ 翻页按钮已显示";
+        setTimeout(() => {
+          toggleBtn.textContent = "👁️ 显示/隐藏翻页按钮";
+        }, 1000);
+      }
     });
 
-    observer.observe(document.body, { childList: true, subtree: true });
+    container.appendChild(toggleBtn);
+
+    //返回首页按钮
+    const indexBtn = document.createElement("button");
+    indexBtn.style.cssText = `
+        background: rgba(255, 255, 255, 0.12);
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        color: white;
+        padding: 8px 14px;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 14px;
+        font-weight: 500;
+        backdrop-filter: blur(4px);
+        transition: all 0.2s ease;
+        text-align: left;
+        width: 100%;
+      `;
+    indexBtn.innerHTML = "🏠 返回首页";
+    indexBtn.addEventListener("click", () => {
+      if (document.querySelector(".readerTopBar_link")) {
+        document.querySelector(".readerTopBar_link").click();
+      }
+    });
+
+    container.appendChild(indexBtn);
+
+    panel.appendChild(container);
+  }
+
+  // 可选：自动注入其他控件（保留你的逻辑）
+  const observer = new MutationObserver(() => {
+    const container = panel.querySelector(".panel-content");
+    if (!container) return;
+
+    const items = document.querySelectorAll(".readerControls_item");
+    if (items.length > 0 && !container.contains(items[items.length - 1])) {
+      const item = document.createElement("div");
+      item.innerText = "黑夜/白天";
+      items[items.length - 1].appendChild(item);
+      container.appendChild(items[items.length - 1]);
+    }
+  });
+
+  observer.observe(document.body, { childList: true, subtree: true });
 });
