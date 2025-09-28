@@ -17,8 +17,6 @@
     "frontendDist": "../dist"
   },
   "bundle": {
-    "resources": [
-      "config/*"
-    ]
+    "resources": ["config/*"]
   }
 }
