@@ -137,7 +137,7 @@ pub fn set_config_window(app: &AppHandle) {
             tauri::WebviewUrl::App("config.html".into()),
         )
         .title("WxReader_fish配置")
-        .inner_size(200.0, 400.0)
+        .inner_size(400.0, 400.0)
         .resizable(true)
         .build()
         .unwrap();

@@ -1,3 +1,4 @@
+use std::collections::HashMap;
 use std::str::FromStr;
 use std::sync::{Arc, Mutex};
 use std::time::{Duration, Instant};
@@ -105,14 +106,14 @@ pub fn set_system_tray(app: &AppHandle, show_system_tray: bool) -> tauri::Result
 //     Ok(())
 // }
 
-pub fn set_multiple_global_shortcuts(app: &AppHandle, config: &PakeConfig) -> tauri::Result<()> {
-    if config.shortcuts.is_empty() {
+pub fn set_multiple_global_shortcuts(app: &AppHandle, config: &HashMap<String, String>) -> tauri::Result<()> {
+    if config.is_empty() {
         return Ok(());
     }
 
     let app_handle = app.clone();
     let last_triggered = Arc::new(Mutex::new(Instant::now()));
-    let shortcuts_clone = config.shortcuts.clone();
+    let shortcuts_clone = config.clone();
 
     // 注册全局快捷键插件处理器
     app_handle
@@ -140,7 +141,7 @@ pub fn set_multiple_global_shortcuts(app: &AppHandle, config: &PakeConfig) -> ta
         .expect("Failed to set global shortcuts");
 
     // 注册所有快捷键
-    for (action, shortcut_str) in &config.shortcuts {
+    for (action, shortcut_str) in config {
         if let Ok(shortcut_hotkey) = Shortcut::from_str(shortcut_str) {
             match app.global_shortcut().register(shortcut_hotkey) {
                 Ok(_) => {

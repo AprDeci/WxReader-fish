@@ -24,9 +24,16 @@ pub fn get_pake_config() -> (PakeConfig, Config) {
     (pake_config, tauri_config)
 }
 
-pub fn get_shortcuts() {}
+pub fn get_shortcuts() -> HashMap<String, String> {
+    let shortcuts = serde_json::from_str(include_str!("../config/shortcuts.json"))
+        .expect("Failed to parse shortcuts");
+    shortcuts
+}
 
-pub fn set_shortcuts(shortcuts: HashMap<String, String>) {}
+pub fn set_shortcuts(shortcuts: HashMap<String, String>) {
+    let shortcuts = serde_json::to_string(&shortcuts).expect("Failed to serialize shortcuts");
+    std::fs::write("../config/shortcuts.json", shortcuts).expect("Failed to write shortcuts");
+}
 
 pub fn get_data_dir(app: &AppHandle, package_name: String) -> PathBuf {
     {
