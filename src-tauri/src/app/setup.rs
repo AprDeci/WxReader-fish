@@ -147,8 +147,17 @@ pub fn set_multiple_global_shortcuts(app: &AppHandle, shortcuts: Vec<String>) ->
                     println!("Registered global shortcut '{}'", shortcut_str);
                 }
                 Err(e) => {
-                    println!("Failed to register global shortcut '{}': {}", shortcut_str, e);
-                    show_toast(&app.get_webview_window("pake").unwrap(), &format!("Failed to register global shortcut '{}': {}", shortcut_str, e));
+                    println!(
+                        "Failed to register global shortcut '{}': {}",
+                        shortcut_str, e
+                    );
+                    show_toast(
+                        &app.get_webview_window("pake").unwrap(),
+                        &format!(
+                            "Failed to register global shortcut '{}': {}",
+                            shortcut_str, e
+                        ),
+                    );
                 }
             }
         }
