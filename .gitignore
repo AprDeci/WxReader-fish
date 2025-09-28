@@ -27,10 +27,11 @@ output
 *.dmg
 *.app
 
-dist
+dist/*
 !dist/about_pake.html
 !dist/cli.js
 !dist/.gitkeep
+!dist/config.html
 src-tauri/.cargo/config.toml
 src-tauri/.cargo/
 .next

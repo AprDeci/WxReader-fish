@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>config</title>
+    <style>
+        /* 全局字体和排版 */
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+            font-size: 14px;
+            color: #333;
+            padding: 20px;
+            margin: 0;
+            box-sizing: border-box;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            /* 增加行间距 */
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+        .input-container {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        /* 左侧标签文字美化 */
+        .input-container>div:first-child {
+            font-weight: 600;
+            color: #444;
+            min-width: 60px;
+            text-align: right;
+            font-size: 15px;
+        }
+
+        .input-wrapper {
+            position: relative;
+            width: 100%;
+        }
+
+        /* 输入框美化 */
+        input {
+            width: 100%;
+            padding: 10px 36px 10px 12px;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font-size: 14px;
+            outline: none;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        input:focus {
+            border-color: #1890ff;
+            box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.2);
+        }
+
+        input::placeholder {
+            color: #999;
+        }
+
+        /* 清除按钮 × 美化 */
+        .clear-btn {
+            position: absolute;
+            right: 8px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            font-size: 18px;
+            cursor: pointer;
+            color: #999;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: all 0.2s;
+        }
+
+        .clear-btn:hover {
+            color: #ff4d4f;
+            background-color: #fff2f0;
+        }
+
+        /* 保存按钮美化 */
+        button[onclick="saveShortcuts()"] {
+            padding: 10px 16px;
+            background-color: #1890ff;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 15px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            margin-top: 8px;
+        }
+
+        button[onclick="saveShortcuts()"]:hover {
+            background-color: #40a9ff;
+        }
+
+        button[onclick="saveShortcuts()"]:active {
+            background-color: #096dd9;
+        }
+
+        /* 输出提示信息美化 */
+        #output {
+            min-height: 24px;
+            padding: 6px 0;
+            font-size: 13px;
+            color: #666;
+            line-height: 1.4;
+        }
+
+        /* 错误提示 */
+        #output:has-text("错误") {
+            color: #ff4d4f;
+        }
+
+        #output {
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="input-container">
+            <div>老板键:</div>
+            <div class="input-wrapper">
+                <input id="hotkey-input-visual" placeholder="Set hotkey combo" title="Set hotkey combo" readonly>
+                <button class="clear-btn" onclick="clearShortcut('hotkey-input-visual')">×</button>
+            </div>
+        </div>
+        <div class="input-container">
+            <div>上一页:</div>
+            <div class="input-wrapper">
+                <input id="hotkey-input-pre" placeholder="Set hotkey combo" title="Set hotkey combo" readonly>
+                <button class="clear-btn" onclick="clearShortcut('hotkey-input-pre')">×</button>
+            </div>
+        </div>
+        <div class="input-container">
+            <div>下一页:</div>
+            <div class="input-wrapper">
+                <input id="hotkey-input-next" placeholder="Set hotkey combo" title="Set hotkey combo" readonly>
+                <button class="clear-btn" onclick="clearShortcut('hotkey-input-next')">×</button>
+            </div>
+        </div>
+        <div id="output"></div>
+        <button onclick="saveShortcuts()">保存配置</button>
+    </div>
+
+    <script>
+        const inputs = {
+            visual: document.getElementById('hotkey-input-visual'),
+            prev: document.getElementById('hotkey-input-pre'),
+            next: document.getElementById('hotkey-input-next')
+        };
+        const output = document.getElementById('output');
+        let currentInput = null;
+
+        // 存储当前按下的修饰键和主按键
+        let modifiers = [];
+        let mainKey = '';
+
+        // 为每个输入框添加点击事件
+        Object.values(inputs).forEach(input => {
+            input.addEventListener('click', () => {
+                currentInput = input;
+                input.value = '';
+                modifiers = [];
+                mainKey = '';
+                const label = input.parentElement.previousElementSibling.textContent;
+                output.textContent = `请为${label}设置快捷键...`;
+                input.focus();
+            });
+        });
+
+        // 监听键盘按下事件
+        document.addEventListener('keydown', (event) => {
+            if (!currentInput) return;
+            event.preventDefault(); // 阻止默认行为
+
+            // 捕获修饰键（Ctrl, Alt, Shift, Meta）
+            if (event.ctrlKey && !modifiers.includes('Ctrl')) modifiers.push('Ctrl');
+            if (event.altKey && !modifiers.includes('Alt')) modifiers.push('Alt');
+            if (event.shiftKey && !modifiers.includes('Shift')) modifiers.push('Shift');
+            if (event.metaKey && !modifiers.includes('Meta')) modifiers.push('Meta');
+
+            // 捕获主按键（排除修饰键）
+            if (!['Control', 'Alt', 'Shift', 'Meta'].includes(event.key)) {
+                mainKey = event.key.toUpperCase();
+            }
+
+            // 更新输入框显示
+            currentInput.value = [...modifiers, mainKey].filter(Boolean).join('+');
+        });
+
+        // 监听键盘松开事件，确认快捷键录入
+        document.addEventListener('keyup', () => {
+            if (!currentInput) return;
+            const label = currentInput.parentElement.previousElementSibling.textContent;
+            if (mainKey) {
+                const shortcut = [...modifiers, mainKey].join('+');
+                // 检查快捷键是否已存在
+                const otherInputs = Object.values(inputs).filter(input => input !== currentInput);
+                if (otherInputs.some(input => input.value === shortcut)) {
+                    output.textContent = `错误：${shortcut} 已被其他功能使用！`;
+                    currentInput.value = '';
+                } else {
+                    output.textContent = `${label} 设置为: ${shortcut}`;
+                }
+            } else if (modifiers.length > 0) {
+                output.textContent = '请至少选择一个主按键！';
+            }
+            currentInput = null; // 重置当前输入框
+        });
+
+        // 删除快捷键
+        function clearShortcut(inputId) {
+            const input = document.getElementById(inputId);
+            input.value = '';
+            output.textContent = `已清除 ${input.parentElement.previousElementSibling.textContent} 的快捷键`;
+        }
+
+        // 保存快捷键配置
+        function saveShortcuts() {
+            const shortcuts = {
+                bossKey: inputs.visual.value,
+                prevPage: inputs.prev.value,
+                nextPage: inputs.next.value
+            };
+            const uniqueShortcuts = new Set(Object.values(shortcuts).filter(val => val));
+            if (Object.values(shortcuts).every(val => val)) {
+                if (uniqueShortcuts.size === Object.keys(shortcuts).length) {
+                    output.textContent = '快捷键配置已保存！';
+                    console.log('保存的快捷键配置:', shortcuts);
+                } else {
+                    output.textContent = '错误：存在重复的快捷键！';
+                }
+            } else {
+                output.textContent = '请确保所有快捷键都已设置！';
+            }
+        }
+    </script>
+</body>
+
+</html>

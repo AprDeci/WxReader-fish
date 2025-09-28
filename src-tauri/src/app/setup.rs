@@ -1,6 +1,7 @@
 use std::str::FromStr;
 use std::sync::{Arc, Mutex};
 use std::time::{Duration, Instant};
+use tauri::WebviewWindowBuilder;
 use tauri::{
     menu::{MenuBuilder, MenuItemBuilder},
     tray::TrayIconBuilder,
@@ -19,10 +20,11 @@ pub fn set_system_tray(app: &AppHandle, show_system_tray: bool) -> tauri::Result
 
     let hide_app = MenuItemBuilder::with_id("hide_app", "Hide").build(app)?;
     let show_app = MenuItemBuilder::with_id("show_app", "Show").build(app)?;
+    let config = MenuItemBuilder::with_id("config", "Config").build(app)?;
     let quit = MenuItemBuilder::with_id("quit", "Quit").build(app)?;
 
     let menu = MenuBuilder::new(app)
-        .items(&[&hide_app, &show_app, &quit])
+        .items(&[&hide_app, &show_app, &config, &quit])
         .build()?;
 
     app.app_handle().remove_tray_by_id("pake-tray");
@@ -39,6 +41,23 @@ pub fn set_system_tray(app: &AppHandle, show_system_tray: bool) -> tauri::Result
                 if let Some(window) = app.get_webview_window("pake") {
                     window.show().unwrap();
                 }
+            }
+            "config" => {  
+                // 检查配置窗口是否已存在  
+                if app.get_webview_window("config").is_none() {   
+                    let config_window = WebviewWindowBuilder::new(app, "config", tauri::WebviewUrl::App("config.html".into()))  
+                        .title("WxReader_fish配置")  
+                        .inner_size(200.0,400.0)  
+                        .resizable(true)  
+                        .build()  
+                        .unwrap();  
+
+                    config_window.show().unwrap();  
+                } else {  
+                    let window = app.get_webview_window("config").unwrap();  
+                    window.show().unwrap();  
+                    window.set_focus().unwrap();  
+                }  
             }
             "quit" => {
                 app.save_window_state(StateFlags::all()).unwrap();
