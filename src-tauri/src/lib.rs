@@ -14,7 +14,7 @@ use app::{
     setup::{set_multiple_global_shortcuts, set_system_tray},
     window::set_window,
 };
-use util::{get_pake_config, get_shortcuts, front_get_shortcuts, front_set_shortcuts};
+use util::{front_get_shortcuts, front_set_shortcuts, get_pake_config, get_shortcuts};
 
 pub fn run_app() {
     let (pake_config, tauri_config) = get_pake_config();

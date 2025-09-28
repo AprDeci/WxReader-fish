@@ -106,7 +106,10 @@ pub fn set_system_tray(app: &AppHandle, show_system_tray: bool) -> tauri::Result
 //     Ok(())
 // }
 
-pub fn set_multiple_global_shortcuts(app: &AppHandle, config: &HashMap<String, String>) -> tauri::Result<()> {
+pub fn set_multiple_global_shortcuts(
+    app: &AppHandle,
+    config: &HashMap<String, String>,
+) -> tauri::Result<()> {
     if config.is_empty() {
         return Ok(());
     }
