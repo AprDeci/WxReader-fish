@@ -1,6 +1,7 @@
 document.addEventListener("DOMContentLoaded", () => {
   // Toast
   function pakeToast(msg) {
+    console.log("pakeToast", msg);
     const m = document.createElement("div");
     m.innerHTML = msg;
     m.style.cssText =

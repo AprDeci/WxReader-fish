@@ -9,6 +9,8 @@ use tauri::{
 use tauri_plugin_global_shortcut::{GlobalShortcutExt, Shortcut};
 use tauri_plugin_window_state::{AppHandleExt, StateFlags};
 
+use crate::util::show_toast;
+
 pub fn set_system_tray(app: &AppHandle, show_system_tray: bool) -> tauri::Result<()> {
     if !show_system_tray {
         app.remove_tray_by_id("pake-tray");
@@ -138,10 +140,8 @@ pub fn set_multiple_global_shortcuts(app: &AppHandle, shortcuts: Vec<String>) ->
                     println!("Registered global shortcut '{}'", shortcut_str);
                 }
                 Err(e) => {
-                    eprintln!(
-                        "Failed to register global shortcut '{}': {}",
-                        shortcut_str, e
-                    );
+                    println!("Failed to register global shortcut '{}': {}", shortcut_str, e);
+                    show_toast(&app.get_webview_window("pake").unwrap(), &format!("Failed to register global shortcut '{}': {}", shortcut_str, e));
                 }
             }
         }
