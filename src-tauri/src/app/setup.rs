@@ -42,22 +42,26 @@ pub fn set_system_tray(app: &AppHandle, show_system_tray: bool) -> tauri::Result
                     window.show().unwrap();
                 }
             }
-            "config" => {  
-                // 检查配置窗口是否已存在  
-                if app.get_webview_window("config").is_none() {   
-                    let config_window = WebviewWindowBuilder::new(app, "config", tauri::WebviewUrl::App("config.html".into()))  
-                        .title("WxReader_fish配置")  
-                        .inner_size(200.0,400.0)  
-                        .resizable(true)  
-                        .build()  
-                        .unwrap();  
+            "config" => {
+                // 检查配置窗口是否已存在
+                if app.get_webview_window("config").is_none() {
+                    let config_window = WebviewWindowBuilder::new(
+                        app,
+                        "config",
+                        tauri::WebviewUrl::App("config.html".into()),
+                    )
+                    .title("WxReader_fish配置")
+                    .inner_size(200.0, 400.0)
+                    .resizable(true)
+                    .build()
+                    .unwrap();
 
-                    config_window.show().unwrap();  
-                } else {  
-                    let window = app.get_webview_window("config").unwrap();  
-                    window.show().unwrap();  
-                    window.set_focus().unwrap();  
-                }  
+                    config_window.show().unwrap();
+                } else {
+                    let window = app.get_webview_window("config").unwrap();
+                    window.show().unwrap();
+                    window.set_focus().unwrap();
+                }
             }
             "quit" => {
                 app.save_window_state(StateFlags::all()).unwrap();
@@ -159,8 +163,17 @@ pub fn set_multiple_global_shortcuts(app: &AppHandle, shortcuts: Vec<String>) ->
                     println!("Registered global shortcut '{}'", shortcut_str);
                 }
                 Err(e) => {
-                    println!("Failed to register global shortcut '{}': {}", shortcut_str, e);
-                    show_toast(&app.get_webview_window("pake").unwrap(), &format!("Failed to register global shortcut '{}': {}", shortcut_str, e));
+                    println!(
+                        "Failed to register global shortcut '{}': {}",
+                        shortcut_str, e
+                    );
+                    show_toast(
+                        &app.get_webview_window("pake").unwrap(),
+                        &format!(
+                            "Failed to register global shortcut '{}': {}",
+                            shortcut_str, e
+                        ),
+                    );
                 }
             }
         }
