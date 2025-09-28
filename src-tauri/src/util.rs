@@ -1,5 +1,6 @@
 use crate::app::config::PakeConfig;
 use std::env;
+use std::collections::HashMap;
 use std::path::PathBuf;
 use tauri::{AppHandle, Config, Manager, WebviewWindow};
 
@@ -21,6 +22,14 @@ pub fn get_pake_config() -> (PakeConfig, Config) {
         .expect("Failed to parse tauri config");
 
     (pake_config, tauri_config)
+}
+
+pub fn get_shortcuts() {
+    
+}
+
+pub fn set_shortcuts(shortcuts: HashMap<String, String>) {
+    
 }
 
 pub fn get_data_dir(app: &AppHandle, package_name: String) -> PathBuf {

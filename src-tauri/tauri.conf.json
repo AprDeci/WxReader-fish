@@ -15,5 +15,10 @@
   },
   "build": {
     "frontendDist": "../dist"
+  },
+  "bundle": {
+    "resources": [
+      "config/*"
+    ]
   }
 }
