@@ -158,6 +158,7 @@
         </div>
         <div id="output"></div>
         <button onclick="saveShortcuts()">保存配置</button>
+        <button onclick="getShortcuts()">获取配置</button>
     </div>
 
     <script>
@@ -252,6 +253,19 @@
                 output.textContent = '请确保所有快捷键都已设置！';
             }
         }
+
+        async function getShortcuts() {
+            console.log(window.__TAURI__);
+            const shortcuts = await window.__TAURI__.core.invoke('front_get_shortcuts');
+            console.log('获取的快捷键配置:', shortcuts);
+            inputs.visual.value = shortcuts.toggle_window;
+            inputs.prev.value = shortcuts.prev_page;
+            inputs.next.value = shortcuts.next_page;
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            getShortcuts();
+        });
     </script>
 </body>
 

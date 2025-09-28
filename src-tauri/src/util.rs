@@ -30,6 +30,16 @@ pub fn get_shortcuts() -> HashMap<String, String> {
     shortcuts
 }
 
+#[tauri::command]
+pub fn front_get_shortcuts() -> HashMap<String, String> {
+    get_shortcuts()
+}
+
+#[tauri::command]
+pub fn front_set_shortcuts(shortcuts: HashMap<String, String>) {
+    set_shortcuts(shortcuts)
+}
+
 pub fn set_shortcuts(shortcuts: HashMap<String, String>) {
     let shortcuts = serde_json::to_string(&shortcuts).expect("Failed to serialize shortcuts");
     std::fs::write("../config/shortcuts.json", shortcuts).expect("Failed to write shortcuts");

@@ -14,7 +14,7 @@ use app::{
     setup::{set_multiple_global_shortcuts, set_system_tray},
     window::set_window,
 };
-use util::{get_pake_config, get_shortcuts};
+use util::{get_pake_config, get_shortcuts, front_get_shortcuts, front_set_shortcuts};
 
 pub fn run_app() {
     let (pake_config, tauri_config) = get_pake_config();
@@ -53,6 +53,8 @@ pub fn run_app() {
             download_file,
             download_file_by_binary,
             send_notification,
+            front_get_shortcuts,
+            front_set_shortcuts,
         ])
         .setup(move |app| {
             let window = set_window(app, &pake_config, &tauri_config);
