@@ -1,7 +1,7 @@
 use crate::app::config::PakeConfig;
 use crate::util::get_data_dir;
 use std::{path::PathBuf, str::FromStr};
-use tauri::{window, App, Config, Url, WebviewUrl, WebviewWindow, WebviewWindowBuilder};
+use tauri::{window, App, AppHandle, Config, Manager, Url, WebviewUrl, WebviewWindow, WebviewWindowBuilder};
 
 #[cfg(target_os = "macos")]
 use tauri::{Theme, TitleBarStyle};
@@ -125,4 +125,21 @@ pub fn set_window(app: &mut App, config: &PakeConfig, tauri_config: &Config) -> 
     }
 
     window_builder.build().expect("Failed to build window")
+}
+
+pub fn set_config_window(app: &AppHandle) {
+    if app.get_webview_window("config").is_none() {   
+        let config_window = WebviewWindowBuilder::new(app, "config", tauri::WebviewUrl::App("config.html".into()))  
+            .title("WxReader_fish配置")  
+            .inner_size(200.0,400.0)  
+            .resizable(true)  
+            .build()  
+            .unwrap();  
+
+        config_window.show().unwrap();  
+    } else {  
+        let window = app.get_webview_window("config").unwrap();  
+        window.show().unwrap();  
+        window.set_focus().unwrap();  
+    }  
 }

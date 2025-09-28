@@ -10,6 +10,7 @@ use tauri::{
 use tauri_plugin_global_shortcut::{GlobalShortcutExt, Shortcut};
 use tauri_plugin_window_state::{AppHandleExt, StateFlags};
 
+use crate::app::window::set_config_window;
 use crate::util::show_toast;
 
 pub fn set_system_tray(app: &AppHandle, show_system_tray: bool) -> tauri::Result<()> {
@@ -44,20 +45,7 @@ pub fn set_system_tray(app: &AppHandle, show_system_tray: bool) -> tauri::Result
             }
             "config" => {  
                 // 检查配置窗口是否已存在  
-                if app.get_webview_window("config").is_none() {   
-                    let config_window = WebviewWindowBuilder::new(app, "config", tauri::WebviewUrl::App("config.html".into()))  
-                        .title("WxReader_fish配置")  
-                        .inner_size(200.0,400.0)  
-                        .resizable(true)  
-                        .build()  
-                        .unwrap();  
-
-                    config_window.show().unwrap();  
-                } else {  
-                    let window = app.get_webview_window("config").unwrap();  
-                    window.show().unwrap();  
-                    window.set_focus().unwrap();  
-                }  
+                set_config_window(app);
             }
             "quit" => {
                 app.save_window_state(StateFlags::all()).unwrap();
