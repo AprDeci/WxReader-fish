@@ -131,13 +131,16 @@ pub fn set_window(app: &mut App, config: &PakeConfig, tauri_config: &Config) -> 
 
 pub fn set_config_window(app: &AppHandle) {
     if app.get_webview_window("WxReader_fish_config").is_none() {
-        let config_window =
-            WebviewWindowBuilder::new(app, "WxReader_fish_config", tauri::WebviewUrl::App("config.html".into()))
-                .title("WxReader_fish配置")
-                .inner_size(200.0, 400.0)
-                .resizable(true)
-                .build()
-                .unwrap();
+        let config_window = WebviewWindowBuilder::new(
+            app,
+            "WxReader_fish_config",
+            tauri::WebviewUrl::App("config.html".into()),
+        )
+        .title("WxReader_fish配置")
+        .inner_size(200.0, 400.0)
+        .resizable(true)
+        .build()
+        .unwrap();
 
         config_window.show().unwrap();
     } else {
