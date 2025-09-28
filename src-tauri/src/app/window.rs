@@ -53,7 +53,7 @@ pub fn set_window(app: &mut App, config: &PakeConfig, tauri_config: &Config) -> 
     {
         window_builder = window_builder.transparent(true);
     }
-    
+
     // macos 设置背景颜色(未测试)
     #[cfg(target_os = "macos")]
     {
@@ -61,16 +61,16 @@ pub fn set_window(app: &mut App, config: &PakeConfig, tauri_config: &Config) -> 
         use cocoa::base::{id, nil};
         let ns_window = window.ns_window().unwrap() as id;
         unsafe {
-          let bg_color = NSColor::colorWithRed_green_blue_alpha_(
-              nil,
-              50.0 / 255.0,
-              158.0 / 255.0,
-              163.5 / 255.0,
-              0.0,
-          );
-          ns_window.setOpaque_(0);
-          ns_window.setHasShadow_(0);
-          ns_window.setBackgroundColor_(bg_color);
+            let bg_color = NSColor::colorWithRed_green_blue_alpha_(
+                nil,
+                50.0 / 255.0,
+                158.0 / 255.0,
+                163.5 / 255.0,
+                0.0,
+            );
+            ns_window.setOpaque_(0);
+            ns_window.setHasShadow_(0);
+            ns_window.setBackgroundColor_(bg_color);
         }
     }
 
