@@ -45,10 +45,34 @@ pub fn set_window(app: &mut App, config: &PakeConfig, tauri_config: &Config) -> 
         .fullscreen(window_config.fullscreen)
         .inner_size(window_config.width, window_config.height)
         .always_on_top(window_config.always_on_top)
-        .transparent(window_config.transparent)
         .decorations(window_config.decorations)
         .shadow(window_config.shadow)
         .incognito(window_config.incognito);
+
+    #[cfg(target_os = "windows")]
+    {
+        window_builder = window_builder.transparent(true);
+    }
+    
+    // macos 设置背景颜色(未测试)
+    #[cfg(target_os = "macos")]
+    {
+        use cocoa::appkit::{NSColor, NSWindow};
+        use cocoa::base::{id, nil};
+        let ns_window = window.ns_window().unwrap() as id;
+        unsafe {
+          let bg_color = NSColor::colorWithRed_green_blue_alpha_(
+              nil,
+              50.0 / 255.0,
+              158.0 / 255.0,
+              163.5 / 255.0,
+              0.0,
+          );
+          ns_window.setOpaque_(0);
+          ns_window.setHasShadow_(0);
+          ns_window.setBackgroundColor_(bg_color);
+        }
+    }
 
     if !window_config.enable_drag_drop {
         window_builder = window_builder.disable_drag_drop_handler();
