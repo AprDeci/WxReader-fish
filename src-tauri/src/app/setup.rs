@@ -43,8 +43,8 @@ pub fn set_system_tray(app: &AppHandle, show_system_tray: bool) -> tauri::Result
                     window.show().unwrap();
                 }
             }
-            "config" => {  
-                // 检查配置窗口是否已存在  
+            "config" => {
+                // 检查配置窗口是否已存在
                 set_config_window(app);
             }
             "quit" => {
