@@ -1,7 +1,6 @@
 use std::str::FromStr;
 use std::sync::{Arc, Mutex};
 use std::time::{Duration, Instant};
-use tauri::WebviewWindowBuilder;
 use tauri::{
     menu::{MenuBuilder, MenuItemBuilder},
     tray::TrayIconBuilder,
@@ -10,6 +9,7 @@ use tauri::{
 use tauri_plugin_global_shortcut::{GlobalShortcutExt, Shortcut};
 use tauri_plugin_window_state::{AppHandleExt, StateFlags};
 
+use crate::app::config::PakeConfig;
 use crate::app::window::set_config_window;
 use crate::util::show_toast;
 
@@ -105,16 +105,16 @@ pub fn set_system_tray(app: &AppHandle, show_system_tray: bool) -> tauri::Result
 //     Ok(())
 // }
 
-pub fn set_multiple_global_shortcuts(app: &AppHandle, shortcuts: Vec<String>) -> tauri::Result<()> {
-    if shortcuts.is_empty() {
+pub fn set_multiple_global_shortcuts(app: &AppHandle, config: &PakeConfig) -> tauri::Result<()> {
+    if config.shortcuts.is_empty() {
         return Ok(());
     }
 
     let app_handle = app.clone();
     let last_triggered = Arc::new(Mutex::new(Instant::now()));
-    let shortcuts_clone = shortcuts.clone();
+    let shortcuts_clone = config.shortcuts.clone();
 
-    // 先注册插件处理器
+    // 注册全局快捷键插件处理器
     app_handle
         .plugin(
             tauri_plugin_global_shortcut::Builder::new()
@@ -126,10 +126,10 @@ pub fn set_multiple_global_shortcuts(app: &AppHandle, shortcuts: Vec<String>) ->
                     *last_triggered = Instant::now();
 
                     // 检查哪个快捷键被触发
-                    for shortcut_str in &shortcuts_clone {
+                    for (action, shortcut_str) in &shortcuts_clone {
                         if let Ok(shortcut_hotkey) = Shortcut::from_str(shortcut_str) {
                             if shortcut_hotkey.eq(event) {
-                                handle_shortcut_action(app, shortcut_str);
+                                handle_shortcut_action(app, action);
                                 break;
                             }
                         }
@@ -139,35 +139,36 @@ pub fn set_multiple_global_shortcuts(app: &AppHandle, shortcuts: Vec<String>) ->
         )
         .expect("Failed to set global shortcuts");
 
-    // 然后注册所有快捷键
-    for shortcut_str in &shortcuts {
+    // 注册所有快捷键
+    for (action, shortcut_str) in &config.shortcuts {
         if let Ok(shortcut_hotkey) = Shortcut::from_str(shortcut_str) {
             match app.global_shortcut().register(shortcut_hotkey) {
                 Ok(_) => {
-                    println!("Registered global shortcut '{}'", shortcut_str);
+                    println!("Registered global shortcut '{}': {}", action, shortcut_str);
                 }
                 Err(e) => {
-                    println!(
-                        "Failed to register global shortcut '{}': {}",
-                        shortcut_str, e
-                    );
+                    println!("Failed to register global shortcut '{}': {}", shortcut_str, e);
                     show_toast(
                         &app.get_webview_window("pake").unwrap(),
-                        &format!(
-                            "Failed to register global shortcut '{}': {}",
-                            shortcut_str, e
-                        ),
+                        &format!("Failed to register global shortcut '{}': {}", shortcut_str, e),
                     );
                 }
             }
+        } else {
+            println!("Invalid shortcut format: {}", shortcut_str);
+            show_toast(
+                &app.get_webview_window("pake").unwrap(),
+                &format!("Invalid shortcut format: {}", shortcut_str),
+            );
         }
     }
 
     Ok(())
 }
-fn handle_shortcut_action(app: &AppHandle, shortcut: &str) {
-    match shortcut {
-        "Alt+V" => {
+
+fn handle_shortcut_action(app: &AppHandle, action: &str) {
+    match action {
+        "toggle_window" => {
             if let Some(window) = app.get_webview_window("pake") {
                 let is_visible = window.is_visible().unwrap();
                 if is_visible {
@@ -178,24 +179,24 @@ fn handle_shortcut_action(app: &AppHandle, shortcut: &str) {
                 }
             }
         }
-        "Alt+C" => {
+        "next_page" => {
             if let Some(window) = app.get_webview_window("pake") {
-                let script = r#"  
-                    nextPage();
-                "#;
+                let script = r#"nextPage();"#;
                 window.eval(script).unwrap();
             }
         }
-        "Alt+Z" => {
+        "prev_page" => {
             if let Some(window) = app.get_webview_window("pake") {
-                let script = r#"  
-                    prevPage();
-                "#;
+                let script = r#"prevPage();"#;
                 window.eval(script).unwrap();
             }
         }
         _ => {
-            println!("Unknown shortcut: {}", shortcut);
+            println!("Unknown action: {}", action);
+            show_toast(
+                &app.get_webview_window("pake").unwrap(),
+                &format!("Unknown action: {}", action),
+            );
         }
     }
 }

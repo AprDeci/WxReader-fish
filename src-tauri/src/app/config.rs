@@ -1,3 +1,5 @@
+use std::collections::HashMap;
+
 use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Serialize, Deserialize)]
@@ -12,8 +14,6 @@ pub struct WindowConfig {
     pub always_on_top: bool,
     pub dark_mode: bool,
     pub disabled_web_shortcuts: bool,
-    pub activation_shortcut: String,
-    pub custom_shortcuts: Vec<String>,
     pub hide_on_close: bool,
     pub incognito: bool,
     pub title: Option<String>,
@@ -60,6 +60,7 @@ pub type FunctionON = PlatformSpecific<bool>;
 pub struct PakeConfig {
     pub windows: Vec<WindowConfig>,
     pub user_agent: UserAgent,
+    pub shortcuts: HashMap<String, String>,
     pub system_tray: FunctionON,
     pub system_tray_path: String,
     pub proxy_url: String,
