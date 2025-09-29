@@ -38,7 +38,9 @@ fn default_shortcuts() -> HashMap<String, String> {
     map
 }
 
-pub fn get_shortcuts(app: &AppHandle) -> Result<HashMap<String, String>, Box<dyn std::error::Error>> {
+pub fn get_shortcuts(
+    app: &AppHandle,
+) -> Result<HashMap<String, String>, Box<dyn std::error::Error>> {
     let config_path = app
         .path()
         .resolve("shortcuts.json", BaseDirectory::AppData)?;
@@ -64,14 +66,14 @@ pub fn front_set_shortcuts(app: AppHandle, shortcuts: HashMap<String, String>) {
 pub fn set_shortcuts(app: AppHandle, shortcuts: HashMap<String, String>) {
     println!("set shortcuts: {:?}", shortcuts);
     let shortcuts_json = serde_json::to_string(&shortcuts).expect("Failed to serialize shortcuts");
-    
+
     let config_path = app
         .path()
         .resolve("shortcuts.json", BaseDirectory::AppData)
         .expect("Failed to resolve config path");
 
     println!("Writing to config path: {}", config_path.display());
-    
+
     std::fs::write(config_path, shortcuts_json).expect("Failed to write shortcuts.json");
 }
 
