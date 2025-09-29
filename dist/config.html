@@ -237,21 +237,15 @@
         // 保存快捷键配置
         function saveShortcuts() {
             const shortcuts = {
-                bossKey: inputs.visual.value,
-                prevPage: inputs.prev.value,
-                nextPage: inputs.next.value
+                toggle_window: inputs.visual.value,
+                prev_page: inputs.prev.value,
+                next_page: inputs.next.value
             };
-            const uniqueShortcuts = new Set(Object.values(shortcuts).filter(val => val));
-            if (Object.values(shortcuts).every(val => val)) {
-                if (uniqueShortcuts.size === Object.keys(shortcuts).length) {
-                    output.textContent = '快捷键配置已保存！';
-                    console.log('保存的快捷键配置:', shortcuts);
-                } else {
-                    output.textContent = '错误：存在重复的快捷键！';
-                }
-            } else {
-                output.textContent = '请确保所有快捷键都已设置！';
-            }
+            console.log('保存的快捷键配置:', shortcuts);
+            window.__TAURI__.core.invoke('front_set_shortcuts', { shortcuts });
+
+
+
         }
 
         async function getShortcuts() {

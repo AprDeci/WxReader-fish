@@ -10,7 +10,6 @@ use tauri::{
 use tauri_plugin_global_shortcut::{GlobalShortcutExt, Shortcut};
 use tauri_plugin_window_state::{AppHandleExt, StateFlags};
 
-use crate::app::config::PakeConfig;
 use crate::app::window::set_config_window;
 use crate::util::show_toast;
 

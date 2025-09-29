@@ -1,7 +1,8 @@
 use crate::app::config::PakeConfig;
-use std::collections::HashMap;
-use std::env;
 use std::path::PathBuf;
+use std::{collections::HashMap};
+use std::env;
+use tauri::path::{BaseDirectory};
 use tauri::{AppHandle, Config, Manager, WebviewWindow};
 
 pub fn get_pake_config() -> (PakeConfig, Config) {
@@ -24,6 +25,11 @@ pub fn get_pake_config() -> (PakeConfig, Config) {
     (pake_config, tauri_config)
 }
 
+#[tauri::command]
+pub fn front_get_shortcuts() -> HashMap<String, String> {
+    get_shortcuts()
+}
+
 pub fn get_shortcuts() -> HashMap<String, String> {
     let shortcuts = serde_json::from_str(include_str!("../config/shortcuts.json"))
         .expect("Failed to parse shortcuts");
@@ -31,18 +37,16 @@ pub fn get_shortcuts() -> HashMap<String, String> {
 }
 
 #[tauri::command]
-pub fn front_get_shortcuts() -> HashMap<String, String> {
-    get_shortcuts()
+pub fn front_set_shortcuts(app: AppHandle, shortcuts: HashMap<String, String>) {
+    set_shortcuts(app, shortcuts)
 }
 
-#[tauri::command]
-pub fn front_set_shortcuts(shortcuts: HashMap<String, String>) {
-    set_shortcuts(shortcuts)
-}
-
-pub fn set_shortcuts(shortcuts: HashMap<String, String>) {
+pub fn set_shortcuts(app: AppHandle, shortcuts: HashMap<String, String>) {
+    println!("set shortcuts: {:?}", shortcuts);
     let shortcuts = serde_json::to_string(&shortcuts).expect("Failed to serialize shortcuts");
-    std::fs::write("../config/shortcuts.json", shortcuts).expect("Failed to write shortcuts");
+    let resource_path = app.path().resolve("shortcuts.json", BaseDirectory::Resource).expect("Failed to get resource dir");
+    println!("resource path: {}", resource_path.display());
+    std::fs::write(resource_path, shortcuts).expect("Failed to write shortcuts");
 }
 
 pub fn get_data_dir(app: &AppHandle, package_name: String) -> PathBuf {

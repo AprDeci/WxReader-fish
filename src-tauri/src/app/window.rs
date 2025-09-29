@@ -2,7 +2,7 @@ use crate::app::config::PakeConfig;
 use crate::util::get_data_dir;
 use std::{path::PathBuf, str::FromStr};
 use tauri::{
-    window, App, AppHandle, Config, Manager, Url, WebviewUrl, WebviewWindow, WebviewWindowBuilder,
+    App, AppHandle, Config, Manager, Url, WebviewUrl, WebviewWindow, WebviewWindowBuilder,
 };
 
 #[cfg(target_os = "macos")]
