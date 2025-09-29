@@ -1,7 +1,7 @@
 {
   "productName": "WxReader-fish",
   "identifier": "top.aprdec.wxreader-fish",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "app": {
     "withGlobalTauri": true,
     "trayIcon": {
