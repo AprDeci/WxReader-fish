@@ -111,3 +111,8 @@ pub fn send_notification(app: AppHandle, params: NotificationParams) -> Result<(
         .unwrap();
     Ok(())
 }
+
+#[command]
+pub async fn open_url(_: tauri::AppHandle, url: String) {
+    open::that(url).unwrap();
+}

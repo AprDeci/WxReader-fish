@@ -2698,6 +2698,7 @@ name = "pake"
 version = "3.1.2"
 dependencies = [
  "cocoa",
+ "open",
  "serde",
  "serde_json",
  "tauri",

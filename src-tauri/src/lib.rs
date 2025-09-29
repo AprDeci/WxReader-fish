@@ -16,6 +16,8 @@ use app::{
 };
 use util::{front_get_shortcuts, front_set_shortcuts, get_pake_config, get_shortcuts};
 
+use crate::app::invoke::open_url;
+
 pub fn run_app() {
     let (pake_config, tauri_config) = get_pake_config();
     let tauri_app =
@@ -54,6 +56,7 @@ pub fn run_app() {
             send_notification,
             front_get_shortcuts,
             front_set_shortcuts,
+            open_url
         ])
         .setup(move |app| {
             let window = set_window(app, &pake_config, &tauri_config);
