@@ -26,12 +26,13 @@ pub fn get_pake_config() -> (PakeConfig, Config) {
 }
 
 #[tauri::command]
-pub fn front_get_shortcuts() -> HashMap<String, String> {
-    get_shortcuts()
+pub fn front_get_shortcuts(app: AppHandle) -> HashMap<String, String> {
+    get_shortcuts(app)
 }
 
-pub fn get_shortcuts() -> HashMap<String, String> {
-    let shortcuts = serde_json::from_str(include_str!("../config/shortcuts.json"))
+pub fn get_shortcuts(app: AppHandle) -> HashMap<String, String> {
+    let resource_path = app.path().resolve("shortcuts.json", BaseDirectory::Resource).expect("Failed to get resource dir");
+    let shortcuts = serde_json::from_str(std::fs::read_to_string(resource_path).expect("Failed to read shortcuts").as_str())
         .expect("Failed to parse shortcuts");
     shortcuts
 }

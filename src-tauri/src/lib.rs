@@ -18,7 +18,6 @@ use util::{front_get_shortcuts, front_set_shortcuts, get_pake_config, get_shortc
 
 pub fn run_app() {
     let (pake_config, tauri_config) = get_pake_config();
-    let shortcuts = get_shortcuts();
     let tauri_app =
         tauri::Builder::default().plugin(tauri_plugin_window_state::Builder::new().build());
 
@@ -59,6 +58,7 @@ pub fn run_app() {
         .setup(move |app| {
             let window = set_window(app, &pake_config, &tauri_config);
             set_system_tray(app.app_handle(), show_system_tray).unwrap();
+            let shortcuts = get_shortcuts(app.app_handle().clone());
             set_multiple_global_shortcuts(app.app_handle(), &shortcuts).unwrap();
             // Show window after state restoration to prevent position flashing
             let window_clone = window.clone();
