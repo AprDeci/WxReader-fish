@@ -27,23 +27,35 @@ pub fn get_pake_config() -> (PakeConfig, Config) {
 
 #[tauri::command]
 pub fn front_get_shortcuts(app: AppHandle) -> HashMap<String, String> {
-    get_shortcuts(app)
+    get_shortcuts(&app).unwrap_or(HashMap::new())
 }
 
-pub fn get_shortcuts(app: AppHandle) -> HashMap<String, String> {
-    let resource_path = app
+fn default_shortcuts() -> HashMap<String, String> {
+    let mut map = HashMap::new();
+    map.insert("toggle_window".to_string(), "Alt+V".to_string());
+    map.insert("next_page".to_string(), "Alt+C".to_string());
+    map.insert("prev_page".to_string(), "Alt+Z".to_string());
+    map
+}
+
+pub fn get_shortcuts(app: &AppHandle) -> Result<HashMap<String, String>, Box<dyn std::error::Error>> {
+    let config_path = app
         .path()
-        .resolve("shortcuts.json", BaseDirectory::Resource)
-        .expect("Failed to get resource dir");
-    let shortcuts = serde_json::from_str(
-        std::fs::read_to_string(resource_path)
-            .expect("Failed to read shortcuts")
-            .as_str(),
-    )
-    .expect("Failed to parse shortcuts");
-    shortcuts
-}
+        .resolve("shortcuts.json", BaseDirectory::AppData)?;
 
+    if config_path.exists() {
+        let content = std::fs::read_to_string(&config_path)?;
+        let shortcuts: HashMap<String, String> = serde_json::from_str(&content)?;
+        Ok(shortcuts)
+    } else {
+        let defaults = default_shortcuts();
+        let json = serde_json::to_string_pretty(&defaults)?;
+        std::fs::create_dir_all(config_path.parent().unwrap())?; // 确保目录存在
+        std::fs::write(&config_path, json)?;
+        println!("Created default shortcuts at: {}", config_path.display());
+        Ok(defaults)
+    }
+}
 #[tauri::command]
 pub fn front_set_shortcuts(app: AppHandle, shortcuts: HashMap<String, String>) {
     set_shortcuts(app, shortcuts)
@@ -51,13 +63,16 @@ pub fn front_set_shortcuts(app: AppHandle, shortcuts: HashMap<String, String>) {
 
 pub fn set_shortcuts(app: AppHandle, shortcuts: HashMap<String, String>) {
     println!("set shortcuts: {:?}", shortcuts);
-    let shortcuts = serde_json::to_string(&shortcuts).expect("Failed to serialize shortcuts");
-    let resource_path = app
+    let shortcuts_json = serde_json::to_string(&shortcuts).expect("Failed to serialize shortcuts");
+    
+    let config_path = app
         .path()
-        .resolve("shortcuts.json", BaseDirectory::Resource)
-        .expect("Failed to get resource dir");
-    println!("resource path: {}", resource_path.display());
-    std::fs::write(resource_path, shortcuts).expect("Failed to write shortcuts");
+        .resolve("shortcuts.json", BaseDirectory::AppData)
+        .expect("Failed to resolve config path");
+
+    println!("Writing to config path: {}", config_path.display());
+    
+    std::fs::write(config_path, shortcuts_json).expect("Failed to write shortcuts.json");
 }
 
 pub fn get_data_dir(app: &AppHandle, package_name: String) -> PathBuf {

@@ -58,8 +58,8 @@ pub fn run_app() {
         .setup(move |app| {
             let window = set_window(app, &pake_config, &tauri_config);
             set_system_tray(app.app_handle(), show_system_tray).unwrap();
-            let shortcuts = get_shortcuts(app.app_handle().clone());
-            set_multiple_global_shortcuts(app.app_handle(), &shortcuts).unwrap();
+            let shortcuts = get_shortcuts(&app.app_handle().clone());
+            set_multiple_global_shortcuts(app.app_handle(), &shortcuts.unwrap()).unwrap();
             // Show window after state restoration to prevent position flashing
             let window_clone = window.clone();
             tauri::async_runtime::spawn(async move {

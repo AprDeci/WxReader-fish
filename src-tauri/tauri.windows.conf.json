@@ -1,13 +1,22 @@
 {
   "bundle": {
-    "icon": ["png/weread_fish_256.ico", "png/weread_fish_32.ico"],
+    "icon": [
+      "png/weread_fish_256.ico",
+      "png/weread_fish_32.ico"
+    ],
     "active": true,
-    "resources": ["png/weread_fish_32.png", "config/*"],
-    "targets": ["msi"],
+    "resources": [
+      "png/weread_fish_32.png"
+    ],
+    "targets": [
+      "msi"
+    ],
     "windows": {
       "digestAlgorithm": "sha256",
       "wix": {
-        "language": ["en-US"],
+        "language": [
+          "en-US"
+        ],
         "template": "assets/main.wxs"
       }
     }
