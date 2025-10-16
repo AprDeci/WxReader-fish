@@ -134,18 +134,18 @@ document.addEventListener("DOMContentLoaded", () => {
     container.appendChild(indexBtn);
 
     //字体颜色选择器
-    const fontColorPicker = document.createElement("input")
-    fontColorPicker.type = "color"
-    container.appendChild(fontColorPicker)
+    const fontColorPicker = document.createElement("input");
+    fontColorPicker.type = "color";
+    const currentColor = document.querySelector(".readerChapterContent").style.color;
+    fontColorPicker.value = currentColor;
+    container.appendChild(fontColorPicker);
     fontColorPicker.addEventListener("input", () => {
-      document.querySelector(".readerChapterContent").style.color = fontColorPicker.value
-    })
+      document.querySelector(".readerChapterContent").style.color =
+        fontColorPicker.value;
+    });
 
     panel.appendChild(container);
   }
-
-
-
 
   // 可选：自动注入其他控件（保留你的逻辑）
   const observer = new MutationObserver(() => {
@@ -154,9 +154,18 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const items = document.querySelectorAll(".readerControls_item");
     if (items.length > 0 && !container.contains(items[items.length - 1])) {
-      const item = document.createElement("div");
-      item.innerText = "黑夜/白天";
-      items[items.length - 1].appendChild(item);
+      items[items.length - 1].style = `
+        width: 100%;
+        padding: 8px 14px;
+        height: 40px;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 14px;
+        font-weight: 500;
+                backdrop-filter: blur(4px);
+        transition: all 0.2s ease;
+        text-align: left;
+      `;
       container.appendChild(items[items.length - 1]);
     }
   });
