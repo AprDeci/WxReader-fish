@@ -158,11 +158,12 @@ document.addEventListener("DOMContentLoaded", () => {
         width: 100%;
         padding: 8px 14px;
         height: 40px;
+        border: 1px solid rgba(255, 255, 255, 0.15);
         border-radius: 6px;
         cursor: pointer;
         font-size: 14px;
         font-weight: 500;
-                backdrop-filter: blur(4px);
+        backdrop-filter: blur(4px);
         transition: all 0.2s ease;
         text-align: left;
       `;
