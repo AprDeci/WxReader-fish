@@ -9,7 +9,7 @@ document.addEventListener("DOMContentLoaded", () => {
       left: 0;
       transform: translateY(-50%);
       width: 8px;
-      height: 160px;
+      height: 200px;
       background: rgba(30, 30, 35, 0.75);
       backdrop-filter: blur(10px);
       -webkit-backdrop-filter: blur(10px);
@@ -133,8 +133,19 @@ document.addEventListener("DOMContentLoaded", () => {
 
     container.appendChild(indexBtn);
 
+    //字体颜色选择器
+    const fontColorPicker = document.createElement("input")
+    fontColorPicker.type = "color"
+    container.appendChild(fontColorPicker)
+    fontColorPicker.addEventListener("input", () => {
+      document.querySelector(".readerChapterContent").style.color = fontColorPicker.value
+    })
+
     panel.appendChild(container);
   }
+
+
+
 
   // 可选：自动注入其他控件（保留你的逻辑）
   const observer = new MutationObserver(() => {
