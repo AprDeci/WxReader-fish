@@ -136,7 +136,8 @@ document.addEventListener("DOMContentLoaded", () => {
     //字体颜色选择器
     const fontColorPicker = document.createElement("input");
     fontColorPicker.type = "color";
-    const currentColor = document.querySelector(".readerChapterContent").style.color;
+    const currentColor = document.querySelector(".readerChapterContent").style
+      .color;
     fontColorPicker.value = currentColor;
     container.appendChild(fontColorPicker);
     fontColorPicker.addEventListener("input", () => {
