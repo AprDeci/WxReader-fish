@@ -143,6 +143,7 @@ document.addEventListener("DOMContentLoaded", () => {
     fontColorPicker.addEventListener("input", () => {
       document.querySelector(".readerChapterContent").style.color =
         fontColorPicker.value;
+      window.dispatchEvent(new Event("resize"));
     });
 
     panel.appendChild(container);
